@@ -85,7 +85,9 @@ loginForm.addEventListener('submit', async (e) => {
   const email = document.getElementById('login-email').value;
   const password = document.getElementById('login-password').value;
   try {
-    await signInWithEmailAndPassword(auth, email, password);
+    const credential = await signInWithEmailAndPassword(auth, email, password);
+    // Force-refresh token so recently updated claims (if any) are reflected immediately.
+    await credential.user.getIdToken(true);
     adminLoginModal.classList.add('hidden');
     loginForm.reset();
     showView('admin');
@@ -106,24 +108,9 @@ logoutBtn.addEventListener('click', async () => {
 // Auth state
 onAuthStateChanged(auth, (user) => {
   if (user) {
-    user.getIdTokenResult().then(({ claims }) => {
-      const isAdmin = claims.admin === true;
-      if (isAdmin) {
-        adminBtn.textContent = 'Admin Panel';
-        adminBtn.onclick = () => showView('admin');
-      } else {
-        adminBtn.textContent = 'Admin';
-        adminBtn.onclick = () => {
-          alert('You need admin privileges. Sign in with an admin account.');
-        };
-      }
-    }).catch(() => {
-      adminBtn.textContent = 'Admin';
-      adminBtn.onclick = () => adminLoginModal.classList.remove('hidden');
-    });
+    adminBtn.textContent = 'Admin Panel';
   } else {
     adminBtn.textContent = 'Admin';
-    adminBtn.onclick = () => adminLoginModal.classList.remove('hidden');
   }
 });
 
