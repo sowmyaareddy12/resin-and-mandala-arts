@@ -61,3 +61,17 @@ firebase emulators:start --only hosting
 ```
 
 Visit `http://localhost:5000` (or the URL shown in the terminal).
+
+
+## Troubleshooting login: `auth/api-key-not-valid`
+
+If admin login shows `auth/api-key-not-valid`, check:
+
+1. `public/firebase-config.js` is deployed and contains your real project config values (not placeholders).
+2. The Firebase Web API key in Google Cloud Console is not deleted/rotated.
+3. API key restrictions allow your hosting domains (`*.web.app`, `*.firebaseapp.com`) and localhost if testing locally.
+4. After updating config, redeploy hosting:
+
+```bash
+firebase deploy --only hosting
+```
