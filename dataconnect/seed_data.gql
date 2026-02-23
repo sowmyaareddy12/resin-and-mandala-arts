@@ -1,0 +1,77 @@
+mutation CreateDemoData @transaction @auth(level: USER, insecureReason: "This operation is for seeding demo data and can be run by any authenticated user.") {
+  artist_insertMany(data: [
+    {
+      id: "b2d2f70b-8d0f-4e0c-9f0e-2d2f70b8d0f4",
+      displayName: "Alice Smith",
+      username: "alicesmith",
+      email: "alice.smith@example.com",
+      passwordHash: "hashedpassword1",
+      bio: "An artist specializing in abstract expressionism.",
+      profilePictureUrl: "https://example.com/alice.jpg",
+      createdAt: "2023-01-15T10:00:00Z"
+    },
+    {
+      id: "a1c1d1e1-f2a2-3b3c-4d4e-5f5a5b5c5d5e",
+      displayName: "Bob Johnson",
+      username: "bobjohnson",
+      email: "bob.johnson@example.com",
+      passwordHash: "hashedpassword2",
+      bio: "A sculptor known for large-scale metal works.",
+      profilePictureUrl: "https://example.com/bob.jpg",
+      createdAt: "2023-02-20T11:30:00Z"
+    }
+  ])
+  artwork_insertMany(data: [
+    {
+      id: "c3e3f3g3-h4i4-5j5k-6l6m-7n7o7p7q7r7s",
+      artistId: "b2d2f70b-8d0f-4e0c-9f0e-2d2f70b8d0f4",
+      title: "Abstract Landscape No. 1",
+      description: "A vibrant abstract painting depicting a serene landscape.",
+      mediaUrl: "https://example.com/artwork1.jpg",
+      dimensions: "24x36 inches",
+      medium: "Oil on canvas",
+      price: 1500.00,
+      status: "available",
+      createdAt: "2023-03-01T09:00:00Z"
+    },
+    {
+      id: "d4f4g4h4-i5j5-6k6l-7m7n-8o8p8q8r8s8t",
+      artistId: "a1c1d1e1-f2a2-3b3c-4d4e-5f5a5b5c5d5e",
+      title: "The Iron Giant",
+      description: "A monumental sculpture crafted from recycled metal.",
+      mediaUrl: "https://example.com/artwork2.jpg",
+      dimensions: "10 ft tall",
+      medium: "Recycled metal",
+      price: 12000.00,
+      status: "sold",
+      createdAt: "2023-04-10T14:15:00Z"
+    }
+  ])
+  collection_insertMany(data: [
+    {
+      id: "e5g5h5i5-j6k6-7l7m-8n8o-9p9q9r9s9t9u",
+      artistId: "b2d2f70b-8d0f-4e0c-9f0e-2d2f70b8d0f4",
+      name: "Early Abstracts",
+      description: "A collection of Alice Smith's early abstract works.",
+      createdAt: "2023-05-05T16:00:00Z"
+    }
+  ])
+  artworkCollection_insertMany(data: [
+    {
+      artworkId: "c3e3f3g3-h4i4-5j5k-6l6m-7n7o7p7q7r7s",
+      collectionId: "e5g5h5i5-j6k6-7l7m-8n8o-9p9q9r9s9t9u",
+      createdAt: "2023-05-06T10:00:00Z"
+    }
+  ])
+  inquiry_insertMany(data: [
+    {
+      id: "f6h6i6j6-k7l7-8m8n-9o9p-0q0r0s0t0u0v",
+      artworkId: "c3e3f3g3-h4i4-5j5k-6l6m-7n7o7p7q7r7s",
+      viewerEmail: "interestedbuyer@example.com",
+      message: "I am interested in purchasing Abstract Landscape No. 1. Please provide more details.",
+      viewerName: "Jane Doe",
+      phoneNumber: "555-123-4567",
+      createdAt: "2023-06-12T11:00:00Z"
+    }
+  ])
+}

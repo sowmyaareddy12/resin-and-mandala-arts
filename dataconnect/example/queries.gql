@@ -1,0 +1,8 @@
+query GetArtistProfile($artistId: UUID!) @auth(level: PUBLIC, insecureReason: "This operation is safe to expose to the public as it only retrieves public artist profile information.") {
+  artist(id: $artistId) {
+    id
+    displayName
+    bio
+    profilePictureUrl
+  }
+}

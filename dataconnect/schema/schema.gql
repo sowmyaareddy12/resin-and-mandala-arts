@@ -1,0 +1,43 @@
+type Artist @table {
+  username: String!
+  passwordHash: String!
+  createdAt: Timestamp!
+  email: String
+  displayName: String
+  bio: String
+  profilePictureUrl: String
+}
+
+type Artwork @table {
+  title: String!
+  mediaUrl: String!
+  createdAt: Timestamp!
+  description: String
+  medium: String
+  dimensions: String
+  price: Float
+  status: String
+  artist: Artist
+}
+
+type Collection @table {
+  name: String!
+  createdAt: Timestamp!
+  description: String
+  artist: Artist
+}
+
+type ArtworkCollection @table(key: ["artwork", "collection"]) {
+  createdAt: Timestamp!
+  artwork: Artwork!
+  collection: Collection!
+}
+
+type Inquiry @table {
+  viewerEmail: String!
+  message: String!
+  createdAt: Timestamp!
+  viewerName: String
+  phoneNumber: String
+  artwork: Artwork
+}
