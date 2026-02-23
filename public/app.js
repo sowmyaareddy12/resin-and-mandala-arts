@@ -1,19 +1,23 @@
-const firebaseConfig = window.FIREBASE_CONFIG || {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT_ID.appspot.com",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID"
-};
+const firebaseConfig = window.FIREBASE_CONFIG;
+const requiredFirebaseConfigKeys = ['apiKey', 'authDomain', 'projectId', 'appId'];
+
+function isFirebaseConfigValid(config) {
+  if (!config) return false;
+  return requiredFirebaseConfigKeys.every((key) => {
+    const value = config[key];
+    return typeof value === 'string' && value.trim() !== '' && !value.includes('YOUR_');
+  });
+}
+
+const hasValidFirebaseConfig = isFirebaseConfigValid(firebaseConfig);
 
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js';
 import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js';
 import { getFirestore, collection, addDoc, getDocs, doc, deleteDoc, getDoc, setDoc } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js';
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
+const app = hasValidFirebaseConfig ? initializeApp(firebaseConfig) : null;
+const auth = app ? getAuth(app) : null;
+const db = app ? getFirestore(app) : null;
 
 // DOM elements
 const viewGallery = document.getElementById('view-gallery');
@@ -63,6 +67,11 @@ function showView(viewName) {
 
 // Admin modal
 adminBtn.addEventListener('click', () => {
+  if (!hasValidFirebaseConfig || !auth) {
+    alert('Firebase is not configured correctly. Update public/firebase-config.js and redeploy.');
+    return;
+  }
+
   if (auth.currentUser) {
     showView('admin');
     document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
@@ -84,6 +93,12 @@ loginForm.addEventListener('submit', async (e) => {
   e.preventDefault();
   const email = document.getElementById('login-email').value;
   const password = document.getElementById('login-password').value;
+  if (!hasValidFirebaseConfig || !auth) {
+    loginError.textContent = 'Firebase config is missing or invalid. Update public/firebase-config.js with your project settings.';
+    loginError.classList.remove('hidden');
+    return;
+  }
+
   try {
     const credential = await signInWithEmailAndPassword(auth, email, password);
     // Force-refresh token so recently updated claims (if any) are reflected immediately.
@@ -93,12 +108,17 @@ loginForm.addEventListener('submit', async (e) => {
     showView('admin');
     document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
   } catch (err) {
-    loginError.textContent = err.code === 'auth/invalid-credential' ? 'Invalid email or password.' : err.message;
+    if (err.code === 'auth/api-key-not-valid.-please-pass-a-valid-api-key.') {
+      loginError.textContent = 'Firebase API key is invalid for this site. Verify public/firebase-config.js and API key restrictions in Google Cloud Console.';
+    } else {
+      loginError.textContent = err.code === 'auth/invalid-credential' ? 'Invalid email or password.' : err.message;
+    }
     loginError.classList.remove('hidden');
   }
 });
 
 logoutBtn.addEventListener('click', async () => {
+  if (!auth) return;
   await signOut(auth);
   showView('gallery');
   document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
@@ -106,18 +126,28 @@ logoutBtn.addEventListener('click', async () => {
 });
 
 // Auth state
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    adminBtn.textContent = 'Admin Panel';
-  } else {
-    adminBtn.textContent = 'Admin';
-  }
-});
+if (auth) {
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      adminBtn.textContent = 'Admin Panel';
+    } else {
+      adminBtn.textContent = 'Admin';
+    }
+  });
+} else {
+  adminBtn.textContent = 'Admin';
+}
 
 // Load artworks (public read)
 async function loadArtworks() {
   artworksGrid.innerHTML = '<div class="loading">Loading artworks...</div>';
   emptyState.classList.add('hidden');
+
+  if (!db) {
+    artworksGrid.innerHTML = '<div class="empty-state">Firebase config missing. Set public/firebase-config.js and redeploy.</div>';
+    return;
+  }
+
   try {
     const snap = await getDocs(collection(db, 'artworks'));
     artworksGrid.innerHTML = '';
@@ -150,6 +180,11 @@ function escapeHtml(str) {
 
 // Load help (public read)
 async function loadHelp() {
+  if (!db) {
+    helpContent.innerHTML = '<p>Firebase config missing. Set public/firebase-config.js and redeploy.</p>';
+    return;
+  }
+
   try {
     const docRef = doc(db, 'config', 'help');
     const snap = await getDoc(docRef);
@@ -175,6 +210,11 @@ addArtworkForm.addEventListener('submit', async (e) => {
   const title = document.getElementById('artwork-title').value.trim();
   const imageUrl = document.getElementById('artwork-image').value.trim();
   const description = document.getElementById('artwork-description').value.trim();
+  if (!db) {
+    alert('Firebase config missing. Update public/firebase-config.js and redeploy.');
+    return;
+  }
+
   try {
     await addDoc(collection(db, 'artworks'), { title, imageUrl, description, createdAt: new Date() });
     addArtworkForm.reset();
@@ -191,6 +231,11 @@ helpForm.addEventListener('submit', async (e) => {
   const content = document.getElementById('help-text').value;
   const email = document.getElementById('contact-email').value;
   const instagram = document.getElementById('contact-instagram').value;
+  if (!db) {
+    alert('Firebase config missing. Update public/firebase-config.js and redeploy.');
+    return;
+  }
+
   try {
     await setDoc(doc(db, 'config', 'help'), { content, email, instagram });
     loadHelp();
@@ -202,6 +247,12 @@ helpForm.addEventListener('submit', async (e) => {
 // Admin artworks list & delete
 async function loadAdminData() {
   adminArtworksList.innerHTML = '<p>Loading...</p>';
+
+  if (!db) {
+    adminArtworksList.innerHTML = '<p>Firebase config missing. Update public/firebase-config.js and redeploy.</p>';
+    return;
+  }
+
   try {
     const snap = await getDocs(collection(db, 'artworks'));
     adminArtworksList.innerHTML = '';
