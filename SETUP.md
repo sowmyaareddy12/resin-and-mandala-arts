@@ -75,3 +75,41 @@ If admin login shows `auth/api-key-not-valid`, check:
 ```bash
 firebase deploy --only hosting
 ```
+
+
+## Troubleshooting add artwork: `Missing or insufficient permissions`
+
+If adding artwork fails with permission errors:
+
+1. Confirm the signed-in user has custom claim `admin: true` in Firebase Authentication.
+2. Sign out and sign in again after changing claims.
+3. Ensure Firestore rules are deployed:
+
+```bash
+firebase deploy --only firestore:rules
+```
+
+### Image upload notes
+
+- The admin form accepts either:
+  - a local image file upload (stored as a data URL), or
+  - an image URL.
+- For file uploads, keep images under **1.5 MB**.
+
+
+## Front-end structure (Tailwind + TypeScript)
+
+The site now uses separate pages for readability:
+
+- `/index.html` → gallery
+- `/help.html` → help/contact
+- `/login.html` → admin login
+- `/admin.html` → admin management
+
+TypeScript sources are in `public/ts/` and compiled output is in `public/dist/`.
+
+Build the front-end scripts with:
+
+```bash
+npm run build:web
+```

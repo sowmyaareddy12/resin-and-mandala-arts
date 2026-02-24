@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Resin & Mandala Arts | Gallery</title>
+  <title>Resin & Mandala Arts | Help</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-amber-50 text-stone-800 min-h-screen">
@@ -11,24 +11,19 @@
     <nav class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
       <a href="/index.html" class="text-4xl font-serif">Resin & Mandala Arts</a>
       <div class="space-x-6 text-lg">
-        <a href="/index.html" class="text-amber-700">Gallery</a>
-        <a href="/help.html">Help & Contact</a>
+        <a href="/index.html">Gallery</a>
+        <a href="/help.html" class="text-amber-700">Help & Contact</a>
         <a href="/login.html" class="px-3 py-1 rounded bg-amber-700 text-white">Admin Login</a>
       </div>
     </nav>
   </header>
 
-  <main class="max-w-6xl mx-auto px-6 py-10">
-    <h1 class="text-5xl font-serif mb-3">Handcrafted Resin & Mandala Art</h1>
-    <p class="text-stone-600 mb-8">Unique pieces created with care and creativity</p>
-
-    <section id="artworks-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      <p class="text-stone-500">Loading artworks...</p>
-    </section>
-    <div id="empty-state" class="hidden mt-10 text-center text-stone-500">No artworks yet. Check back soon!</div>
+  <main class="max-w-3xl mx-auto px-6 py-10">
+    <h1 class="text-4xl font-serif mb-5">Help & Contact</h1>
+    <section id="help-content" class="bg-white p-6 rounded-xl shadow-sm">Loading...</section>
   </main>
 
   <script src="/firebase-config.js"></script>
-  <script type="module" src="/dist/gallery.js"></script>
+  <script type="module" src="/dist/help.js"></script>
 </body>
 </html>
