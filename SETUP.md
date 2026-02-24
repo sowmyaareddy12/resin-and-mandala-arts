@@ -101,12 +101,12 @@ firebase deploy --only firestore:rules
 
 The site now uses separate pages for readability:
 
-- `/index.html` → gallery
-- `/help.html` → help/contact
-- `/login.html` → admin login
-- `/admin.html` → admin management
+- `/` (rewritten) → `public/gallery/index.html` → gallery
+- `/help/` → `public/help/index.html` → help/contact
+- `/login/` → `public/login/index.html` → admin login
+- `/admin/` → `public/admin/index.html` → admin management
 
-TypeScript sources are in `public/ts/` and compiled output is in `public/dist/`.
+Each page keeps its own TypeScript next to its HTML, and compiled JS is emitted into the same folders.
 
 Build the front-end scripts with:
 

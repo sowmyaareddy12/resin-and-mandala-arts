@@ -3,11 +3,12 @@
     "target": "ES2020",
     "module": "ES2020",
     "moduleResolution": "Bundler",
-    "outDir": "public/dist",
-    "rootDir": "public/ts",
+    "outDir": "public",
+    "rootDir": "public",
     "strict": false,
     "skipLibCheck": true,
     "allowJs": false
   },
-  "include": ["public/ts/**/*.ts"]
+  "include": ["public/**/*.ts"],
+  "exclude": ["public/dist/**", "public/ts/**"]
 }

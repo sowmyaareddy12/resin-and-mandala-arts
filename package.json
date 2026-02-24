@@ -4,7 +4,7 @@
     "deploy": "firebase deploy",
     "deploy:hosting": "firebase deploy --only hosting",
     "serve": "firebase emulators:start --only hosting",
-    "build:web": "functions/node_modules/.bin/tsc -p tsconfig.web.json"
+    "build:web": "node ./functions/node_modules/typescript/bin/tsc -p tsconfig.web.json"
   },
   "dependencies": {
     "@dataconnect/generated": "file:src/dataconnect-generated",

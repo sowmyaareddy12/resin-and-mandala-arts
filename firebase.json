@@ -19,6 +19,15 @@
       "firebase.json",
       "**/.*",
       "**/node_modules/**"
+    ],
+    "redirects": [
+      { "source": "/index.html", "destination": "/", "type": 301 },
+      { "source": "/help.html", "destination": "/help/", "type": 301 },
+      { "source": "/login.html", "destination": "/login/", "type": 301 },
+      { "source": "/admin.html", "destination": "/admin/", "type": 301 }
+    ],
+    "rewrites": [
+      { "source": "/", "destination": "/gallery/index.html" }
     ]
   }
 }

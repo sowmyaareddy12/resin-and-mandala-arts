@@ -1,6 +1,6 @@
 // @ts-nocheck
 import { collection, getDocs } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js';
-import { db, hasValidFirebaseConfig } from './shared.js';
+import { db, hasValidFirebaseConfig } from '/shared/shared.js';
 const artworksGrid = document.getElementById('artworks-grid');
 const emptyState = document.getElementById('empty-state');
 function escapeHtml(str) {
@@ -22,7 +22,7 @@ async function loadArtworks() {
             emptyState.classList.remove('hidden');
             return;
         }
-        snap.docs.forEach(d => {
+        snap.docs.forEach((d) => {
             const data = d.data();
             artworksGrid.innerHTML += `
         <article class="bg-white rounded-xl shadow p-4">
