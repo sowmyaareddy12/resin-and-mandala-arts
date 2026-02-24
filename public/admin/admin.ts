@@ -1,7 +1,7 @@
 // @ts-nocheck
 import { signOut } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js';
 import { collection, addDoc, getDocs, doc, deleteDoc, getDoc, setDoc } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js';
-import { auth, db, hasValidFirebaseConfig, requireAdminUser, readFileAsDataUrl } from './shared.js';
+import { auth, db, hasValidFirebaseConfig, requireAdminUser, readFileAsDataUrl } from '/shared/shared.js';
 
 const MAX_IMAGE_SIZE_BYTES = 1.5 * 1024 * 1024;
 
@@ -36,7 +36,7 @@ async function guardPage() {
 
   const adminCheck = await requireAdminUser();
   if (!adminCheck.ok) {
-    window.location.href = '/login.html';
+    window.location.href = '/login/';
     return false;
   }
 
@@ -52,7 +52,7 @@ async function loadAdminData() {
     return;
   }
 
-  snap.docs.forEach(d => {
+  snap.docs.forEach((d) => {
     const data = d.data();
     const item = document.createElement('div');
     item.className = 'flex justify-between items-center p-3 rounded border';
@@ -133,7 +133,7 @@ helpForm.addEventListener('submit', async (e) => {
 
 logoutBtn.addEventListener('click', async () => {
   await signOut(auth);
-  window.location.href = '/login.html';
+  window.location.href = '/login/';
 });
 
 (async () => {

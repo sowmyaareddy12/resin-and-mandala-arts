@@ -1,6 +1,6 @@
 // @ts-nocheck
 import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js';
-import { db, hasValidFirebaseConfig } from './shared.js';
+import { db, hasValidFirebaseConfig } from '/shared/shared.js';
 
 const helpContent = document.getElementById('help-content');
 

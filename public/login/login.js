@@ -1,6 +1,6 @@
 // @ts-nocheck
 import { signInWithEmailAndPassword, signOut } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js';
-import { auth, hasValidFirebaseConfig } from './shared.js';
+import { auth, hasValidFirebaseConfig } from '/shared/shared.js';
 const form = document.getElementById('login-form');
 const error = document.getElementById('login-error');
 form.addEventListener('submit', async (e) => {
@@ -22,7 +22,7 @@ form.addEventListener('submit', async (e) => {
             error.classList.remove('hidden');
             return;
         }
-        window.location.href = '/admin.html';
+        window.location.href = '/admin/';
     }
     catch (err) {
         if (err.code === 'auth/api-key-not-valid.-please-pass-a-valid-api-key.') {
