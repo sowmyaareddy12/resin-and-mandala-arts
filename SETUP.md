@@ -61,3 +61,55 @@ firebase emulators:start --only hosting
 ```
 
 Visit `http://localhost:5000` (or the URL shown in the terminal).
+
+
+## Troubleshooting login: `auth/api-key-not-valid`
+
+If admin login shows `auth/api-key-not-valid`, check:
+
+1. `public/firebase-config.js` is deployed and contains your real project config values (not placeholders).
+2. The Firebase Web API key in Google Cloud Console is not deleted/rotated.
+3. API key restrictions allow your hosting domains (`*.web.app`, `*.firebaseapp.com`) and localhost if testing locally.
+4. After updating config, redeploy hosting:
+
+```bash
+firebase deploy --only hosting
+```
+
+
+## Troubleshooting add artwork: `Missing or insufficient permissions`
+
+If adding artwork fails with permission errors:
+
+1. Confirm the signed-in user has custom claim `admin: true` in Firebase Authentication.
+2. Sign out and sign in again after changing claims.
+3. Ensure Firestore rules are deployed:
+
+```bash
+firebase deploy --only firestore:rules
+```
+
+### Image upload notes
+
+- The admin form accepts either:
+  - a local image file upload (stored as a data URL), or
+  - an image URL.
+- For file uploads, keep images under **1.5 MB**.
+
+
+## Front-end structure (Tailwind + TypeScript)
+
+The site now uses separate pages for readability:
+
+- `/index.html` → gallery
+- `/help.html` → help/contact
+- `/login.html` → admin login
+- `/admin.html` → admin management
+
+TypeScript sources are in `public/ts/` and compiled output is in `public/dist/`.
+
+Build the front-end scripts with:
+
+```bash
+npm run build:web
+```
